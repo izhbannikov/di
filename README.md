@@ -1,4 +1,4 @@
-##di: an R package to calculate Deficit Index (DI)
+# di: an R package to calculate Deficit Index (DI)
 
 ## Authors: Ilya Zhbannikov, Konstantin Arbeev, Anatoliy Yashin
 
