@@ -27,5 +27,6 @@ in form of an original data frame with additional DI column.
 }
 \examples{
 library(di)
-ddi <- di(dd, di_columns, age="Age_orig", visible = T)
+dd <- data.frame(subj=seq(1:100), var1=rbinom(100,1,.5), var2=rbinom(100,1,.5), var3=rbinom(100,1,.5))
+ddi <- di(dd, c("var1", "var2", "var3"))
 }
