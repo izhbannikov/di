@@ -1,4 +1,4 @@
-##di - an R package to calculate Deficit Index
+##di: an R package to calculate Deficit Index (DI)
 
 ## Authors: Ilya Zhbannikov, Konstantin Arbeev, Anatoliy Yashin
 
@@ -17,6 +17,6 @@ ddi <- di(dd, c("var1", "var2", "var3"))
 ```
 
 ## References
-```
+
 Arnold B. Mitnitski, Alexander J. Mogilner, and Kenneth Rockwood, “Accumulation of Deficits as a Proxy Measure of Aging,” TheScientificWorldJOURNAL, vol. 1, pp. 323-336, 2001. doi:10.1100/tsw.2001.58
-```
+
