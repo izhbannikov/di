@@ -2,15 +2,25 @@
 % Please edit documentation in R/di.R
 \name{di}
 \alias{di}
-\title{This function calculates Deficit Index (DI) and returns results 
-in form of an original data frame with additional DI column.}
+\title{This function calculates the Deficit Index (DI) and returns results 
+as list: \code{di} a column-vector containing 
+deficit indexes for each individual and
+\code{columns} that were used to calculate the \code{di}.}
 \usage{
-di(dat, cols, age = NULL, visible = FALSE)
+di(dat, cols = NULL, invert = NULL, rescale = TRUE, age = NULL,
+  visible = FALSE)
 }
 \arguments{
-\item{dat}{A data frame.}
+\item{dat}{A data frame. Required parameter.}
 
-\item{cols}{A list of column names.}
+\item{cols}{A list of column names.
+Default: \code{NULL}.}
+
+\item{invert}{A list of columns which have to be inverted.
+Default: \code{NULL}.}
+
+\item{rescale}{A flag that tell the program to rescale columns 
+if the values a not 0/1. Default: \code{TRUE}.}
 
 \item{age}{A name of column which represents age of a patient.
 Default: \code{NULL}.}
@@ -19,14 +29,22 @@ Default: \code{NULL}.}
 Default: \code{FALSE}}
 }
 \value{
-An original data frame with additional DI column.
+A list of two: \code{di} a column-vector containing 
+deficit indexes for each individual and
+\code{columns} (rescaled if flag \code{rescale} was set to \code{TRUE})
+that were used to calculate the \code{di}.
 }
 \description{
-This function calculates Deficit Index (DI) and returns results 
-in form of an original data frame with additional DI column.
+This function calculates the Deficit Index (DI) and returns results 
+as list: \code{di} a column-vector containing 
+deficit indexes for each individual and
+\code{columns} that were used to calculate the \code{di}.
 }
 \examples{
 library(di)
-dd <- data.frame(subj=seq(1:100), var1=rbinom(100,1,.5), var2=rbinom(100,1,.5), var3=rbinom(100,1,.5))
+dd <- data.frame(subj=seq(1:100), 
+                 var1=rbinom(100,1,.5), 
+                 var2=rbinom(100,1,.5), 
+                 var3=rbinom(100,1,.5))
 ddi <- di(dd, c("var1", "var2", "var3"))
 }
