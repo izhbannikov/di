@@ -12,6 +12,10 @@
 #' if the values a not 0/1. Default: \code{TRUE}.
 #' @param age A name of column which represents age of a patient.
 #' Default: \code{NULL}.
+#' @param rescale.custom A custom rescaling. See example below.
+#' Default: \code{NULL}.
+#' @param rescale.avoid A set of column names for which rescaling should be avoided.
+#' Default: \code{NULL}.
 #' @param visible A flag to show DI plot (mean DI in a population by age)
 #' Default: \code{FALSE}
 #' @return A list of two: \code{di} a column-vector containing 
@@ -25,9 +29,20 @@
 #'                  var2=rbinom(100,1,.5), 
 #'                  var3=rbinom(100,1,.5))
 #' ddi <- di(dd, c("var1", "var2", "var3"))
+#' 
+#' # Cusom rescaling
+#' ddi <- di(dd, c("var1", "var2", "var3"), rescale.custom=c("var1:0.1:0.5"))
+#' ddi
 #' @rdname di-di
 #' @export
-di <- function(dat, cols=NULL, invert=NULL, rescale=TRUE, age=NULL, visible=FALSE) {
+di <- function(dat, 
+               cols=NULL, 
+               invert=NULL, 
+               rescale=TRUE, 
+               age=NULL, 
+               rescale.custom=NULL,
+               rescale.avoid=NULL,
+               visible=FALSE) {
     # Basic preprocessing
     if(class(dat) != "data.frame") {
         stop("Parameter dat must be a data frame. Aborting.")
@@ -49,9 +64,51 @@ di <- function(dat, cols=NULL, invert=NULL, rescale=TRUE, age=NULL, visible=FALS
         }
     }
     
-    ## Rescale
+    ## Rescaling
+    custom.resc <- list()
+    if(!is.null(rescale.custom)) {
+        for(item in rescale.custom) {
+            splits <- unlist(strsplit(item, ":"))
+            if(length(splits) == 1 | !(splits[1] %in% names(tmp))) {
+                msg <- sprintf("Custom rescaling '%s' incorrectly defined and will be omitted!", item)
+                warning(msg)
+                next
+            }
+            # Total number of levels
+            num.lev <- length(as.numeric(levels(as.factor(tmp[, splits[1]]))))
+            if((length(splits) - 1) != num.lev) {
+                msg <- sprintf("Custom rescaling '%s' incorrectly defined and will be omitted!", item)
+                warning(msg)
+                next
+            }
+            
+            custom.resc[[splits[1]]] <- c()
+            if(!is.null(rescale.avoid)) {
+                rescale.avoid <- c(rescale.avoid, splits[1])
+            } else {
+              rescale.avoid <- splits[1]
+            }
+            for(i in 2:length(splits)) {
+                custom.resc[[splits[1]]] <- c(custom.resc[[splits[1]]], splits[i])
+            }
+            custom.resc[[splits[1]]] <- as.numeric(custom.resc[[splits[1]]])
+        }
+    }
+    
+    if(length(custom.resc) != 0) {
+        for(item in names(custom.resc)) {
+            for(j in 1:length(custom.resc[[item]])) {
+                tmp[which(tmp[[item]] == as.numeric(levels(as.factor(tmp[, item])))[j]), item] <- custom.resc[[item]][j]
+            }
+        }
+    }
+    
     if(rescale) {
-        tmp.rescaled <- apply(tmp, 2, FUN = rescale)
+        tmp.rescaled <- tmp
+        for(item in names(tmp)[which(!(names(tmp) %in% rescale.avoid))]) {
+            tmp.rescaled[, item] <- rescale(tmp.rescaled[, item])
+        }
+        #tmp.rescaled <- apply(tmp[, which(!(names(tmp) %in% rescale.avoid))], 2, FUN = rescale)
     } else {
         tmp.rescaled <- tmp
     }

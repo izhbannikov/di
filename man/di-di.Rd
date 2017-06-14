@@ -8,7 +8,7 @@ deficit indexes for each individual and
 \code{columns} that were used to calculate the \code{di}.}
 \usage{
 di(dat, cols = NULL, invert = NULL, rescale = TRUE, age = NULL,
-  visible = FALSE)
+  rescale.custom = NULL, rescale.avoid = NULL, visible = FALSE)
 }
 \arguments{
 \item{dat}{A data frame. Required parameter.}
@@ -23,6 +23,12 @@ Default: \code{NULL}.}
 if the values a not 0/1. Default: \code{TRUE}.}
 
 \item{age}{A name of column which represents age of a patient.
+Default: \code{NULL}.}
+
+\item{rescale.custom}{A custom rescaling. See example below.
+Default: \code{NULL}.}
+
+\item{rescale.avoid}{A set of column names for which rescaling should be avoided.
 Default: \code{NULL}.}
 
 \item{visible}{A flag to show DI plot (mean DI in a population by age)
@@ -47,4 +53,8 @@ dd <- data.frame(subj=seq(1:100),
                  var2=rbinom(100,1,.5), 
                  var3=rbinom(100,1,.5))
 ddi <- di(dd, c("var1", "var2", "var3"))
+
+# Cusom rescaling
+ddi <- di(dd, c("var1", "var2", "var3"), rescale.custom=c("var1:0.1:0.5"))
+ddi
 }

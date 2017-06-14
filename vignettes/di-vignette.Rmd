@@ -47,6 +47,23 @@ the ```rescale``` flag to ```FALSE```:
 ddi <- di(dd, c("var1", "var2", "var3"), rescale = FALSE)
 ```
 
+#### Custom rescaling
+
+Sometimes it needs to apply a custom scaling. For example if values 0 and 1 incorrectly represent the reality, 
+the user can apply his own scale: 0 --> 0.2 and 1 --> 0.8. To do this, he needs to use a special grammar:
+<column_name:new_value_1:new_value2:new_value3:...>. Example below shows this situation:
+
+```{r}
+ddi <- di(dd, c("var1", "var2", "var3"), rescale.custom = c("var1:0.2:0.8", "var3:0.3:0.7"))
+```
+
+#### Avoiding rescaling for some columns
+
+Please use ```rescale.avoid``` parameter:
+
+```{r}
+ddi <- di(dd, c("var1", "var2", "var3"), rescale.avoid = c("var2"))
+```
 
 ### Inverting
 
