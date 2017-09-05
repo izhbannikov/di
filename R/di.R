@@ -114,7 +114,8 @@ di <- function(dat,
     }
     
     # Calculate DI
-    di.val <- rowSums(tmp.rescaled, na.rm = T)/dim(tmp.rescaled)[2]
+    #di.val <- rowSums(tmp.rescaled, na.rm = T)/dim(tmp.rescaled)[2]
+    di.val <- rowSums(tmp.rescaled, na.rm = T)/rowSums(!is.na(tmp.rescaled))
     data.di <- cbind(dat, di=di.val)
     ###################################################################
   
