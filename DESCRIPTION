@@ -1,10 +1,9 @@
 Package: di
 Type: Package
 Title: Deficit Index (DI)
-Version: 1.1.1
-Date: 2017-09-05
+Version: 1.1.2
+Date: 2017-09-22
 Authors@R: c(person(c("Ilya", "Y."), "Zhbannikov", email = "ilya.zhbannikov@duke.edu", role = c("aut", "cre")),
-             person(c("Konstantin", "G"), "Arbeev", role = c("ctb"), comment = "Konstantin supervised the technical/software development."),
              person(c("Anatoliy","I"), "Yashin", role = c("ctb"), comment = "Anatoliy supervised the technical/software development and is a Principal Invesigator of this project"))
 Maintainer: Ilya Y. Zhbannikov <ilya.zhbannikov@duke.edu>
 Description: A set of utilities for calculating the Deficit (frailty) Index (DI) in gerontological studies. 
