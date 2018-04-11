@@ -16,6 +16,8 @@
 #' Default: \code{NULL}.
 #' @param rescale.avoid A set of column names for which rescaling should be avoided.
 #' Default: \code{NULL}.
+#' @param bins A number of bins for plotting the DI against age from a dataset. 
+#' Default: \code{7}.
 #' @param visible A flag to show DI plot (mean DI in a population by age)
 #' Default: \code{FALSE}
 #' @return A list of two: \code{di} a column-vector containing 
@@ -42,6 +44,7 @@ di <- function(dat,
                age=NULL, 
                rescale.custom=NULL,
                rescale.avoid=NULL,
+               bins=7,
                visible=FALSE) {
     # Basic preprocessing
     if(class(dat) != "data.frame") {
@@ -72,26 +75,28 @@ di <- function(dat,
             if(length(splits) == 1 | !(splits[1] %in% names(tmp))) {
                 msg <- sprintf("Custom rescaling '%s' incorrectly defined and will be omitted!", item)
                 warning(msg)
-                next
-            }
-            # Total number of levels
-            num.lev <- length(as.numeric(levels(as.factor(tmp[, splits[1]]))))
-            if((length(splits) - 1) != num.lev) {
-                msg <- sprintf("Custom rescaling '%s' incorrectly defined and will be omitted!", item)
-                warning(msg)
-                next
-            }
-            
-            custom.resc[[splits[1]]] <- c()
-            if(!is.null(rescale.avoid)) {
-                rescale.avoid <- c(rescale.avoid, splits[1])
             } else {
-              rescale.avoid <- splits[1]
+                # Total number of levels
+                num.lev <- length(as.numeric(levels(as.factor(tmp[, splits[1]]))))
+                
+                if((length(splits) - 1) != num.lev) {
+                    msg <- sprintf("Custom rescaling '%s' incorrectly defined and will be omitted!", item)
+                    warning(msg)
+                } else {
+                    custom.resc[[splits[1]]] <- c()
+                    if(!is.null(rescale.avoid)) {
+                        rescale.avoid <- c(rescale.avoid, splits[1])
+                    } else {
+                        rescale.avoid <- splits[1]
+                    }
+                    
+                    for(i in 2:length(splits)) {
+                        custom.resc[[splits[1]]] <- c(custom.resc[[splits[1]]], splits[i])
+                    }
+                    
+                    custom.resc[[splits[1]]] <- as.numeric(custom.resc[[splits[1]]])
+                }
             }
-            for(i in 2:length(splits)) {
-                custom.resc[[splits[1]]] <- c(custom.resc[[splits[1]]], splits[i])
-            }
-            custom.resc[[splits[1]]] <- as.numeric(custom.resc[[splits[1]]])
         }
     }
     
@@ -121,31 +126,21 @@ di <- function(dat,
   
     if(visible & !is.null(age)) {
         tryCatch({
-            plot.di(data.di, age)
+            plot.di(data.di, age, bins)
         }, error = function(e) {
-            print(e)
+            print(paste("Please use lower # of bins. Current # is", bins))
         })
     }
   
     return(list(di=di.val, columns=tmp.rescaled))
 }
 
-plot.di <- function(ddi, age, bins=10) {
+plot.di <- function(ddi, age, bins=7) {
     # Plot DI
     bins <- bins
-    loopStop <- 1
-    while(loopStop) {
-        tryCatch({
-            cutpoints <- quantile(ddi[[age]],(0:bins)/bins, na.rm=T)
-            binned <- cut(ddi[[age]],cutpoints,include.lowest=TRUE)
-            mean.di <- tapply(ddi[["di"]], binned, mean)
-            plot(x = cutpoints[1:length(mean.di)], y=mean.di, 
-                 xlab="Age", ylab = "DI", main="Average DI by age in a population")
-            loopStop <- 0
-        }, error=function(e) {
-            bins <- bins - 1
-            if(bins == 0)
-                loopStop <- 0
-        })
-      }
+    cutpoints <- quantile(ddi[[age]],(0:bins)/bins, na.rm=T)
+    binned <- cut(ddi[[age]],cutpoints,include.lowest=TRUE)
+    mean.di <- tapply(ddi[["di"]], binned, mean)
+    plot(x = cutpoints[1:length(mean.di)], y=mean.di, 
+         xlab="Age", ylab = "DI", main="Average DI by age in a population")
 }

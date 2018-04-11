@@ -8,7 +8,8 @@ deficit indexes for each individual and
 \code{columns} that were used to calculate the \code{di}.}
 \usage{
 di(dat, cols = NULL, invert = NULL, rescale = TRUE, age = NULL,
-  rescale.custom = NULL, rescale.avoid = NULL, visible = FALSE)
+  rescale.custom = NULL, rescale.avoid = NULL, bins = 7,
+  visible = FALSE)
 }
 \arguments{
 \item{dat}{A data frame. Required parameter.}
@@ -30,6 +31,9 @@ Default: \code{NULL}.}
 
 \item{rescale.avoid}{A set of column names for which rescaling should be avoided.
 Default: \code{NULL}.}
+
+\item{bins}{A number of bins for plotting the DI against age from a dataset. 
+Default: \code{7}.}
 
 \item{visible}{A flag to show DI plot (mean DI in a population by age)
 Default: \code{FALSE}}
