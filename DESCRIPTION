@@ -1,10 +1,9 @@
 Package: di
 Type: Package
 Title: Deficit Index (DI)
-Version: 1.1.2
-Date: 2017-09-22
-Authors@R: c(person(c("Ilya", "Y."), "Zhbannikov", email = "ilya.zhbannikov@duke.edu", role = c("aut", "cre")),
-             person(c("Anatoliy","I"), "Yashin", role = c("ctb"), comment = "Anatoliy supervised the technical/software development and is a Principal Invesigator of this project"))
+Version: 1.1.3
+Date: 2018-04-11
+Authors@R: c(person(c("Ilya", "Y."), "Zhbannikov", email = "ilya.zhbannikov@duke.edu", role = c("aut", "cre")))
 Maintainer: Ilya Y. Zhbannikov <ilya.zhbannikov@duke.edu>
 Description: A set of utilities for calculating the Deficit (frailty) Index (DI) in gerontological studies. 
              The deficit index was first proposed by Arnold Mitnitski and Kenneth Rockwood 

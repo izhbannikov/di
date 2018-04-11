@@ -133,18 +133,19 @@ di <- function(dat,
 plot.di <- function(ddi, age, bins=10) {
     # Plot DI
     bins <- bins
-    while(1) {
+    loopStop <- 1
+    while(loopStop) {
         tryCatch({
             cutpoints <- quantile(ddi[[age]],(0:bins)/bins, na.rm=T)
             binned <- cut(ddi[[age]],cutpoints,include.lowest=TRUE)
             mean.di <- tapply(ddi[["di"]], binned, mean)
             plot(x = cutpoints[1:length(mean.di)], y=mean.di, 
                  xlab="Age", ylab = "DI", main="Average DI by age in a population")
-            break
+            loopStop <- 0
         }, error=function(e) {
             bins <- bins - 1
             if(bins == 0)
-                break
+                loopStop <- 0
         })
       }
 }
